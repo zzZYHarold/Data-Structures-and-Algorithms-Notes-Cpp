@@ -21,7 +21,7 @@ SeqList<T>::SeqList(int sz) {
     }
 }
 
-// 复制构造函数（PPT 第 16 页）
+// 拷贝构造函数（PPT 第 16 页）
 template <class T>
 SeqList<T>::SeqList(SeqList<T>& L) {
     maxSize = L.Size();
@@ -88,10 +88,10 @@ int SeqList<T>::Search(T& x) const {
 // 注意：这里严格保留 PPT 代码的下标语义：i 为 0-based 插入下标。
 template <class T>
 bool SeqList<T>::Insert(int i, T& x) {
-    if (last == maxSize - 1)
-        return false;                  // 表满
     if (i < 0 || i > last + 1)
         return false;                  // 参数不合理
+    if (last == maxSize - 1)
+        return false;                  // 表满
 
     for (int j = last; j >= i; --j)
         data[j + 1] = data[j];         // 依次后移
@@ -114,7 +114,7 @@ bool SeqList<T>::Remove(int i, T& x) {
     for (int j = i; j <= last; ++j)
         data[j - 1] = data[j];         // 依次前移，填补空位
 
-    --last;
+    last++;
     return true;
 }
 

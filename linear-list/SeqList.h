@@ -20,7 +20,7 @@ protected:
 
 public:
     explicit SeqList(int sz = defaultSize);  // 构造函数
-    SeqList(SeqList<T>& L);                  // 复制构造函数
+    SeqList(SeqList<T>& L);                  // 拷贝构造函数
     ~SeqList() { delete[] data; }            // 析构函数
 
     int Size() const { return maxSize; }
