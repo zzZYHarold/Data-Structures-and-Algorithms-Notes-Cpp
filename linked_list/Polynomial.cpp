@@ -12,6 +12,11 @@ Term* Term::InsertAfter(float c, int e) {
     link = new Term(c, e, link);
     return link;
 }
+/*  等效：
+    Term* newNode = new Term(c, e);
+    newNode->link = this->link;
+    this->link = newNode;
+ */
 
 Polynomial::Polynomial() : first(new Term(0.0f, -1)) {}
 
