@@ -47,14 +47,13 @@ target_include_directories(course_code PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-
-# ============================================================
-# 2. Chapter 3 - Stack Example
-# ============================================================
-
 add_executable(stack_example
         stack/examples/main.cpp
         stack/src/StackApplications.cpp
+)
+
+add_executable(array_example
+        array/examples/image_flip.cpp
 )
 
 target_include_directories(stack_example PRIVATE
