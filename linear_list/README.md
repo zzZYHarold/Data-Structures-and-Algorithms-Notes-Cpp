@@ -1,13 +1,32 @@
-# Lesson 2：2.1-2.2 代码整理
+# Lesson 2：2.1–2.2 代码整理
 
 来源：学院《Lesson 2 (2026秋)-CS - part1》PPT。
 
-文件对应：
+## 目录结构
 
-- `LinearList.h`：2.1 线性表抽象基类（PPT 第 6 页）
-- `SeqList.h`：2.2 顺序表类声明与页内联成员（第 12-14 页）
-- `SeqList.cpp`：构造、复制构造、扩容、查找、插入、删除（第 15-18、20、23、26 页）
-- `SetOperations.h/.cpp`：顺序表实现集合并/交（第 29-30 页）
+```text
+linear_list/
+├── include/
+│   ├── LinearList.h
+│   ├── SeqList.h
+│   └── SetOperations.h
+├── src/
+│   └── SetOperations.cpp
+└── README.md
+```
+
+## 文件对应
+
+- `include/LinearList.h`：2.1 线性表抽象基类（PPT 第 6 页）
+- `include/SeqList.h`：2.2 顺序表模板的声明与完整实现（第 12–18、20、23、26 页）
+- `include/SetOperations.h`、`src/SetOperations.cpp`：顺序表实现集合并/交（第 29–30 页）
+
+项目以仓库根目录作为头文件搜索起点，使用时统一写：
+
+```cpp
+#include "linear_list/include/SeqList.h"
+#include "linear_list/include/SetOperations.h"
+```
 
 ## 整理时修正的课件代码问题
 
@@ -19,6 +38,7 @@
 6. `template <class T,>` 删除多余逗号。
 7. 集合 `Union/Intersection` 的 `template<class T>` 是无效的未使用模板参数，整理版去掉。
 8. `LinearList::operator=` 原课件按值返回抽象类对象，在现代 C++ 中不成立，改为引用返回。
+9. `Remove` 成功后应令 `last` 减一；原整理版误写为加一，本次已修正。
 
 ## 特别注意：PPT 的下标约定不统一
 
@@ -31,12 +51,8 @@
 LA.Insert(n, x);
 ```
 
-## 模板与 .cpp
+## 模板组织方式
 
-现代 C++ 的类模板通常把实现放在头文件（或 `.tpp`）中。为了按本次要求保留 `.h + .cpp` 分离，同时能直接编译，本整理版在 `SeqList.cpp` 中显式实例化了：
-
-```cpp
-template class SeqList<int>;
-```
-
-因此当前文件组直接支持本章示例使用的 `SeqList<int>`。
+`SeqList<T>` 是类模板，其实现必须在实例化点可见，因此声明和实现都放在
+`include/SeqList.h` 中。它不再依赖只针对 `int` 的显式实例化，因而可以直接使用
+`SeqList<int>`、`SeqList<double>` 等不同类型。

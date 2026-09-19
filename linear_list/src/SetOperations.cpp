@@ -1,4 +1,4 @@
-#include "SetOperations.h"
+#include "linear_list/include/SetOperations.h"
 
 // 用顺序表实现集合的“并”运算（PPT 第 29 页）
 void Union(SeqList<int>& LA, SeqList<int>& LB) {

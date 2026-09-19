@@ -1,70 +1,98 @@
-# Lesson 2 — Sections 2.3–2.5 C++ Implementations
+# Lesson 2：2.3–2.5 代码整理
 
-依据《Lesson 2 (2026秋)-CS》2.3–2.5 整理。整理在 `linked_list/` 目录学习与编译。
+依据《Lesson 2 (2026秋)-CS》2.3–2.5 整理。
+
+## 目录结构
+
+```text
+linked_list/
+├── include/
+│   ├── LinkedList.h
+│   ├── CircList.h
+│   ├── DblList.h
+│   ├── Josephus.h
+│   ├── StaticLinkedList.h
+│   ├── Polynomial.h
+│   └── PolynomialStorage.h
+├── src/
+│   ├── StaticLinkedList.cpp
+│   └── Polynomial.cpp
+└── README.md
+```
+
+`LinkedList<T>`、`CircList<T>`、`DblList<T>` 和 `Josephus<T>` 都是模板，完整实现放在
+各自的 `.h` 中。`StaticLinkedList` 与 `Polynomial` 是普通实现，因此保留 `.h + .cpp`
+结构。
+
+项目以仓库根目录作为头文件搜索起点，例如：
+
+```cpp
+#include "linked_list/include/LinkedList.h"
+#include "linked_list/include/StaticLinkedList.h"
+```
 
 ## 文件对应
 
-- `LinkedList.h/.cpp`
+- `include/LinkedList.h`
   - 2.3 单链表
   - `LinkNode<T>`、带附加头结点的 `List<T>`
-  - `Length`、`Search`、`Locate`、`getData/setData`
-  - `Insert`、`Remove`
-  - 前插法 / 后插法建表
-  - `makeEmpty`
-  - 课件末尾练习：单链表逆置
+  - 查找、定位、插入、删除、建表、清空和逆置
 
-- `CircList.h/.cpp`
-  - 2.4 循环链表
-  - 带附加头结点的循环链表
+- `include/StaticLinkedList.h`、`src/StaticLinkedList.cpp`
+  - 2.3.5 静态链表
+  - 数组保存结点，`next` 保存后继结点的数组下标
+  - 初始化、判空、求长、按位访问、按值查找、插入、删除和输出
+
+- `include/CircList.h`
+  - 2.4 带附加头结点的循环链表
   - `Length`、`Search`、`Locate`、`Insert`、`Remove`
 
-- `Josephus.h/.cpp`
+- `include/Josephus.h`
   - 2.4 约瑟夫问题
-  - 按 PPT 的循环链表报数、跳过附加头结点、删除第 m 个结点的思路实现
+  - 按循环链表报数、跳过附加头结点并删除第 `m` 个结点
 
-- `DblList.h/.cpp`
+- `include/DblList.h`
   - 2.4 双向循环链表
-  - `DblNode<T>`、`DblList<T>`
-  - 双向 `Search/Locate`
-  - 前驱方向 / 后继方向 `Insert`、`Remove`
+  - 双向查找、定位、插入和删除
 
-- `PolynomialStorage.h`
-  - 2.5 多项式的前三种顺序存储表示
+- `include/PolynomialStorage.h`
+  - 2.5 多项式的三种顺序存储表示
   - 静态系数数组、动态系数数组、稀疏项 `(coef, exp)` 表示
 
-- `Polynomial.h/.cpp`
+- `include/Polynomial.h`、`src/Polynomial.cpp`
   - 2.5 多项式链表存储
-  - `Term`、`Polynomial`
-  - 按指数升序存储非零项
-  - 两个多项式相加（对应 PPT 第 112–121 页的双指针合并算法）
+  - 按指数升序存储非零项，并用双指针合并完成多项式相加
+
+## 静态链表的实现约定
+
+课件给出了 `SLinkNode` 与数组存储结构，但没有规定空闲结点的管理方式。本整理版采用：
+
+- `list[0]` 为附加头结点；
+- `next == -1` 表示链表结束；
+- `next == -2` 表示该数组槽位空闲；
+- 插入和删除位置使用 1-based 表项序号；
+- `MaxSize == 10` 时最多保存 9 个数据元素。
+
+当前 `ElemType` 为 `int`。分配结点时扫描下标 `1..MaxSize-1`，删除后把槽位重新标记为
+空闲，后续插入可以复用。
 
 ## 与 PPT 原代码相比的必要整理
 
-课件包含若干旧式/笔误代码。这里以“保持算法不变、保证现代 C++17 可编译”为原则做了必要修正：
+课件包含若干旧式写法和笔误。这里以“保持算法不变、保证现代 C++20 可编译”为原则做了必要修正：
 
 1. `NULL` 统一为 `nullptr`。
 2. 修正全角标点、缺失括号、类名 `DbNode/DblNode` 不一致等明显排版错误。
-3. `List::~List()`：PPT 只调用 `makeEmpty()`，会保留并泄漏附加头结点；这里额外 `delete first`。
-4. PPT 的 `inputFront/inputRear` 片段依赖外部对象 `L.setFirst(...)`，但类声明没有对应接口；这里改成 `List<T>` 成员函数，直接操作自身 `first`，算法步骤不变。
-5. 循环链表类在 PPT 中声明为继承 `LinearList<T>`，但当前页给出的接口与 2.1 抽象基类并不完整匹配；本整理不强行继承，避免生成一个无法实例化的抽象类。循环链表本身的结构与算法保持一致。
-6. PPT 的 `CircList` 示例 `main()` 使用默认构造，但类声明只展示了 `CircList(const T x)`；这里同时提供默认构造。
-7. PPT 的 Josephus 代码直接摘链，会使类中的 `last` 在删除尾结点后可能失效；这里通过 `eraseNode()` 同步维护 `last`。
-8. PPT 双向链表类声明里的 `Search` 与实现页参数不一致；这里采用实现页形式 `Search(x, d)`，`d=0` 沿前驱，`d!=0` 沿后继。
-9. PPT 双向链表 `Insert` 中出现 `if (p=first&&i>0)`，属于赋值/比较笔误；这里按语义修正。
-10. PPT 双向链表 `Remove` 的条件可能允许删除 `i=0` 的附加头结点；这里明确要求 `i>=1`。
-11. 2.5 多项式链表只给出了类定义和“相加算法步骤”，没有完整函数代码；`operator+` 是严格按 PPT 第 114 页的指数比较/合并流程补成的可运行版本。
-
-## 关于模板文件为什么 `.h` 会包含 `.cpp`
-
-课程使用类模板，又要求按 `.h/.cpp` 分文件。C++ 模板定义必须在实例化点可见，因此本项目让 `.h` 在末尾包含对应 `.cpp` 实现文件。这样既保留课程的 `.h/.cpp` 结构，又可以直接 `#include "LinkedList.h"` 使用任意 `T`。
-
-在 CMake 中，即使这些 `.cpp` 也被作为源文件单独列出，也不会产生普通非模板函数那样的重复定义问题；但更简洁的做法是模板类只把 `.h` 加入工程即可。
+3. `List::~List()` 除清空数据结点外，也释放附加头结点。
+4. `inputFront/inputRear` 改成 `List<T>` 成员函数，直接操作自身头结点。
+5. `CircList` 不强行继承接口不完整匹配的 `LinearList<T>`，并补充默认构造。
+6. Josephus 删除结点时通过 `eraseNode()` 同步维护尾指针。
+7. 双向链表统一 `Search(x, d)` 接口，并禁止删除附加头结点。
+8. 多项式 `operator+` 按课件的指数比较与合并流程补成可运行实现。
+9. 模板实现全部合并到头文件，不再把 `.cpp` 当作模板头文件包含。
 
 ## 复杂度要点
 
-课件本章小结给出的结论：
-
 - 链表按位置查找：`O(n)`
-- 插入 / 删除如果包含“先找到第 i 个位置”：总体 `O(n)`
-- 若目标结点（或其前驱）已经拿到，只考虑改指针：`O(1)`
-
+- 插入 / 删除若包含“先找到第 i 个位置”：总体 `O(n)`
+- 已知目标结点或其前驱时，修改链接：`O(1)`
+- 当前静态链表扫描空闲槽位：`O(MaxSize)`

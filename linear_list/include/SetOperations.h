@@ -1,7 +1,7 @@
 #ifndef SET_OPERATIONS_H
 #define SET_OPERATIONS_H
 
-#include "SeqList.h"
+#include "linear_list/include/SeqList.h"
 
 // PPT 第 29~30 页：用顺序表实现集合的“并”和“交”。
 // PPT 写了 template<class T>，但 T 并未出现在形参类型中，无法被自动推导。

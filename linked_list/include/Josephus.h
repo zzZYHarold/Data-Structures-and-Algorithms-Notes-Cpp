@@ -1,11 +1,15 @@
-#ifndef JOSEPHUS_IMPLEMENTATION
-#define JOSEPHUS_IMPLEMENTATION
+#ifndef JOSEPHUS_H
+#define JOSEPHUS_H
 
-#include "Josephus.h"
+#include <iostream>
 #include <stdexcept>
 
+#include "linked_list/include/CircList.h"
+
+// 2.4 约瑟夫问题：按 PPT 的“循环链表 + 跳过头结点”思路实现。
+// 返回最后剩下的元素；每次淘汰值可输出到 out。
 template <class T>
-T Josephus(CircList<T>& js, int m, std::ostream& out) {
+T Josephus(CircList<T>& js, int m, std::ostream& out = std::cout) {
     const int n = js.Length();
     if (n <= 0 || m <= 0)
         throw std::invalid_argument("Josephus requires n > 0 and m > 0");
@@ -14,7 +18,6 @@ T Josephus(CircList<T>& js, int m, std::ostream& out) {
     CircLinkNode<T>* p = js.getNext(pr);
 
     for (int i = 0; i < n - 1; ++i) {
-        // 从当前 p 开始把 p 计作 1，走到第 m 个数据结点。
         for (int j = 1; j < m; ++j) {
             pr = p;
             p = p->link;

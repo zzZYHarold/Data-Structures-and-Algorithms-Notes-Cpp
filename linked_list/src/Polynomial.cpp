@@ -1,4 +1,4 @@
-#include "Polynomial.h"
+#include "linked_list/include/Polynomial.h"
 
 #include <cmath>
 #include <iostream>
