@@ -1,6 +1,6 @@
-# 第三章 3.1 栈：代码整理
+# 第三章 3.1–3.2：栈与递归
 
-本讲课件虽然在目录页列出了 3.1~3.5，但正文从第 6 页开始直到第 53 页均围绕 **3.1 栈** 展开，没有进入 3.2「栈与递归」。
+3.1 的第一讲课件正文只讲栈；后续完整课件中的 3.2「栈与递归」也整理在本目录。3.3–3.5 的队列内容见 `queue/`。
 
 ## 内容对应
 
@@ -14,6 +14,7 @@
 | 中缀表达式求值 | 41~45 | `src/StackApplications.cpp` |
 | 后缀表达式求值 | 46~50 | `src/StackApplications.cpp` |
 | 中缀转后缀 | 51~53 | `src/StackApplications.cpp` |
+| 3.2 阶乘、汉诺塔、斐波那契及逆序输出 | 完整课件 | `include/RecursionExamples.h` + `src/RecursionExamples.cpp` |
 
 ## 与课件原代码相比做的整理
 
@@ -30,8 +31,8 @@
 
 ```bash
 cmake -S . -B build
-cmake --build build
-./build/stack_demo
+cmake --build build --target stack_example
+./build/stack_example
 ```
 
-`stack_demo` 中包含顺序栈、共享双栈、链式栈以及四个栈应用的基本断言测试。
+`stack_example` 包含顺序栈、共享双栈、链式栈以及栈应用的基本断言测试。`RecursionExamples.cpp` 属于 `course_code` 的编译检查范围。

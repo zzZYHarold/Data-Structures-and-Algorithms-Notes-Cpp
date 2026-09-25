@@ -53,21 +53,23 @@ template <class T>
 class GenList {
 public:
     GenList() : first(new GenListNode<T>) {
+        // 课件后续删除算法默认附加头结点 ref 初值为 1。
         first->info.ref = 1;
     }
 
-    // 补充：课件声明了析构函数，但未给出实现。
+    // 按课件思路：析构时通过 Remove() 依据引用计数释放广义表。
     ~GenList() {
         Remove(first);
         first = nullptr;
     }
 
-    // 补充：为动态链式结构提供安全深拷贝。
+    // 补充：为无共享、非递归广义表提供安全深拷贝。
     GenList(const GenList<T>& r) : first(Copy(r.first)) {}
 
     GenList<T>& operator=(const GenList<T>& r) {
         if (this == &r)
             return *this;
+
         GenList<T> temp(r);
         std::swap(first, temp.first);
         return *this;
@@ -87,6 +89,7 @@ public:
             x.info.hlink = first->tlink->info.hlink;
         else
             throw std::logic_error("invalid generalized-list node type");
+
         return true;
     }
 
@@ -109,7 +112,7 @@ public:
         return x == nullptr ? nullptr : x->tlink;
     }
 
-    // 复制一个无共享、非递归广义表。
+    // 课件算法：复制一个无共享、非递归广义表。
     void Copy(const GenList<T>& r) {
         if (this == &r)
             return;
@@ -123,14 +126,20 @@ public:
         return Length(first);
     }
 
-    // 按课件定义：空表和只含原子的线性表深度均为 1。
-    // 本实现针对非递归表；递归表的深度为无穷大，不在此函数中处理。
+    // 课件算法：计算非递归广义表深度。
+    // 空表深度为 1；只含原子的线性表深度也为 1。
     int Depth() const {
         return depth(first);
     }
 
-    // 以下两个接口属于补充，只用于在没有 CreateList() 完整实现的情况下
-    // 方便构造和验证课件中的广义表结构；核心存储仍使用课件结点设计。
+    // 补充一个面向对象的公开接口，内部直接使用课件的 delvalue 递归算法：
+    // 删除整个广义表中所有值等于 x 的原子结点。
+    void DeleteValue(const T& x) {
+        delvalue(first, x);
+    }
+
+    // 以下两个接口属于补充：用于在课件未给出 CreateList() 完整实现的情况下
+    // 方便构造和验证广义表；核心存储仍使用课件结点设计。
     void AppendAtom(const T& value) {
         GenListNode<T>* node = new GenListNode<T>;
         node->utype = 1;
@@ -148,28 +157,33 @@ public:
 private:
     GenListNode<T>* first;  // 广义表附加头结点
 
-    // 深拷贝从 ls 开始的同层链，并递归复制其子表。
-    // 与课件注释一致：用于无共享、非递归广义表。
+    // 课件递归复制算法：用于无共享、非递归广义表。
     GenListNode<T>* Copy(GenListNode<T>* ls) const {
-        if (ls == nullptr)
-            return nullptr;
+        GenListNode<T>* q = nullptr;
 
-        GenListNode<T>* node = new GenListNode<T>;
-        node->utype = ls->utype;
+        if (ls != nullptr) {
+            q = new GenListNode<T>;
+            q->utype = ls->utype;
 
-        if (ls->utype == 0) {
-            node->info.ref = ls->info.ref;
-        } else if (ls->utype == 1) {
-            node->info.value = ls->info.value;
-        } else if (ls->utype == 2) {
-            node->info.hlink = Copy(ls->info.hlink);
-        } else {
-            delete node;
-            throw std::logic_error("invalid generalized-list node type");
+            switch (ls->utype) {
+            case 0:
+                q->info.ref = ls->info.ref;
+                break;
+            case 1:
+                q->info.value = ls->info.value;
+                break;
+            case 2:
+                q->info.hlink = Copy(ls->info.hlink);
+                break;
+            default:
+                delete q;
+                throw std::logic_error("invalid generalized-list node type");
+            }
+
+            q->tlink = Copy(ls->tlink);
         }
 
-        node->tlink = Copy(ls->tlink);
-        return node;
+        return q;
     }
 
     int Length(GenListNode<T>* ls) const {
@@ -185,20 +199,21 @@ private:
         return length;
     }
 
+    // 课件递归求深度算法。
     int depth(GenListNode<T>* ls) const {
-        if (ls == nullptr)
+        if (ls == nullptr || ls->tlink == nullptr)
             return 1;
 
-        GenListNode<T>* p = (ls->utype == 0) ? ls->tlink : ls;
+        GenListNode<T>* temp = ls->tlink;
         int maxSubDepth = 0;
 
-        while (p != nullptr) {
-            if (p->utype == 2) {
-                const int subDepth = depth(p->info.hlink);
-                if (subDepth > maxSubDepth)
+        while (temp != nullptr) {
+            if (temp->utype == 2) {
+                const int subDepth = depth(temp->info.hlink);
+                if (maxSubDepth < subDepth)
                     maxSubDepth = subDepth;
             }
-            p = p->tlink;
+            temp = temp->tlink;
         }
 
         return maxSubDepth + 1;
@@ -218,16 +233,52 @@ private:
         return equal(s->tlink, t->tlink);
     }
 
-    // 释放一个无共享、非递归广义表/子表链。
+    // 课件“原子结点删除”算法：
+    // 1. 连续删除同层开头所有值为 x 的原子结点；
+    // 2. 遇到子表时递归进入子表；
+    // 3. 再把当前结点视作链表前驱，继续处理后续结点。
+    void delvalue(GenListNode<T>* ls, const T& x) {
+        if (ls == nullptr || ls->tlink == nullptr)
+            return;
+
+        GenListNode<T>* p = ls->tlink;
+
+        while (p != nullptr && p->utype == 1 && p->info.value == x) {
+            ls->tlink = p->tlink;
+            delete p;
+            p = ls->tlink;
+        }
+
+        if (p != nullptr) {
+            if (p->utype == 2)
+                delvalue(p->info.hlink, x);
+
+            delvalue(p, x);
+        }
+    }
+
+    // 课件“表的删除”算法：附加头结点的引用计数先减 1，
+    // 只有 ref <= 0 时才真正释放该表；遇到子表则递归处理。
     void Remove(GenListNode<T>* ls) {
         if (ls == nullptr)
             return;
 
-        GenListNode<T>* next = ls->tlink;
-        if (ls->utype == 2)
-            Remove(ls->info.hlink);
-        delete ls;
-        Remove(next);
+        --ls->info.ref;
+        if (ls->info.ref <= 0) {
+            GenListNode<T>* q = nullptr;
+
+            while (ls->tlink != nullptr) {
+                q = ls->tlink;
+
+                if (q->utype == 2)
+                    Remove(q->info.hlink);
+
+                ls->tlink = q->tlink;
+                delete q;
+            }
+
+            delete ls;
+        }
     }
 
     void appendNode(GenListNode<T>* node) {
