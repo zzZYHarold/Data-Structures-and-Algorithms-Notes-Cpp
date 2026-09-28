@@ -136,57 +136,49 @@ int AString::Find_BF(const AString& pat, int k) const {
     return -1;
 }
 
-int AString::fastFind(const AString& pat, int k, const int next[]) const {
+int AString::fastFind(const AString& pat, int k, const int pi[]) const {
     int posP = 0;
-    int posT = k;
     const int lengthP = pat.curLength;
-    const int lengthT = curLength;
 
-    while (posP < lengthP && posT < lengthT) {
-        if (posP == -1 || pat.ch[posP] == ch[posT]) {
+    for (int posT = k; posT < curLength; ++posT) {
+        while (posP > 0 && pat.ch[posP] != ch[posT])
+            posP = pi[posP - 1];
+
+        if (pat.ch[posP] == ch[posT])
             ++posP;
-            ++posT;
-        } else {
-            posP = next[posP];
-        }
+
+        if (posP == lengthP)
+            return posT - lengthP + 1;
     }
 
-    if (posP < lengthP)
-        return -1;
-    return posT - lengthP;
+    return -1;
 }
 
 int AString::Find_KMP(const AString& pat, int k) const {
     if (pat.curLength == 0 || k < 0 || k > curLength)
         return -1;
 
-    int* next = new int[pat.curLength];
-    pat.getNext(next);
-    const int result = fastFind(pat, k, next);
-    delete[] next;
+    int* pi = new int[pat.curLength];
+    pat.getPi(pi);
+    const int result = fastFind(pat, k, pi);
+    delete[] pi;
     return result;
 }
 
-void AString::getNext(int next[]) const {
-    if (next == nullptr)
-        throw std::invalid_argument("next array must not be null");
+void AString::getPi(int pi[]) const {
+    if (pi == nullptr)
+        throw std::invalid_argument("pi array must not be null");
     if (curLength == 0)
         return;
 
-    int j = 0;
-    int k = -1;
-    next[0] = -1;
-
-    // 课件写作 while (j < lengthP)，随后先 ++j 再写 next[j]，
-    // 最后一轮会访问 next[lengthP]。这里修正为 j < lengthP - 1。
-    while (j < curLength - 1) {
-        if (k == -1 || ch[k] == ch[j]) {
-            ++k;
+    pi[0] = 0;
+    for (int i = 1; i < curLength; ++i) {
+        int j = pi[i - 1];
+        while (j > 0 && ch[i] != ch[j])
+            j = pi[j - 1];
+        if (ch[i] == ch[j])
             ++j;
-            next[j] = k;
-        } else {
-            k = next[k];
-        }
+        pi[i] = j;
     }
 }
 

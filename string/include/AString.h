@@ -38,9 +38,10 @@ public:
     // 声明为 Find_KMP，后续算法写作 fastFind；这里统一对外保留 Find_KMP。
     int Find_KMP(const AString& pat, int k = 0) const;
 
-    // 计算“当前串作为模式串”时的 next 特征向量。
+    // 计算“当前串作为模式串”时的前缀函数 pi：
+    // pi[i] 是 ch[0..i] 的最长相等真前后缀长度，pi[0] = 0。
     // 调用者需提供至少 Length() 个 int 的数组。
-    void getNext(int next[]) const;
+    void getPi(int pi[]) const;
 
     // 补充：便于示例输出和调试，不改变字符串的核心存储方式。
     const char* c_str() const { return ch; }
@@ -50,7 +51,7 @@ private:
     int curLength;
     int maxSize;
 
-    int fastFind(const AString& pat, int k, const int next[]) const;
+    int fastFind(const AString& pat, int k, const int pi[]) const;
     void checkIndex(int i) const;
 };
 
