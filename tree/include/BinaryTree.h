@@ -18,8 +18,8 @@ struct BinTreeNode {
 
     BinTreeNode() : leftChild(nullptr), rightChild(nullptr) {}
 
-    BinTreeNode(const T& x, BinTreeNode<T>* l = nullptr, BinTreeNode<T>* r = nullptr)
-        : data(x), leftChild(l), rightChild(r) {}
+    BinTreeNode(const T& item, BinTreeNode<T>* left = nullptr, BinTreeNode<T>* right = nullptr)
+        : data(item), leftChild(left), rightChild(right) {}
 };
 
 template <class T>
@@ -30,8 +30,9 @@ public:
     explicit BinaryTree(const T& refValue)
         : root(nullptr), RefValue(refValue) {}
 
-    BinaryTree(BinTreeNode<T>* lch, BinTreeNode<T>* rch, const T& item, const T& refValue = T())
-        : root(new BinTreeNode<T>(item, lch, rch)), RefValue(refValue) {}
+    BinaryTree(BinTreeNode<T>* leftSubtree, BinTreeNode<T>* rightSubtree,
+               const T& item, const T& refValue = T())
+        : root(new BinTreeNode<T>(item, leftSubtree, rightSubtree)), RefValue(refValue) {}
 
     BinaryTree(const BinaryTree<T>& other) : root(Copy(other.root)), RefValue(other.RefValue) {}
 
@@ -58,19 +59,19 @@ public:
         return Size(root);
     }
 
-    BinTreeNode<T>* Parent(BinTreeNode<T>* t) const {
-        if (root == nullptr || root == t)
+    BinTreeNode<T>* Parent(BinTreeNode<T>* targetNode) const {
+        if (targetNode == nullptr || root == nullptr || root == targetNode)
             return nullptr;
 
-        return Parent(root, t);
+        return Parent(root, targetNode);
     }
 
-    BinTreeNode<T>* LeftChild(BinTreeNode<T>* t) const {
-        return t != nullptr ? t->leftChild : nullptr;
+    BinTreeNode<T>* LeftChild(BinTreeNode<T>* targetNode) const {
+        return targetNode != nullptr ? targetNode->leftChild : nullptr;
     }
 
-    BinTreeNode<T>* RightChild(BinTreeNode<T>* t) const {
-        return t != nullptr ? t->rightChild : nullptr;
+    BinTreeNode<T>* RightChild(BinTreeNode<T>* targetNode) const {
+        return targetNode != nullptr ? targetNode->rightChild : nullptr;
     }
 
     BinTreeNode<T>* getRoot() const {
@@ -101,81 +102,81 @@ public:
         if (root == nullptr)
             return;
 
-        std::stack<BinTreeNode<T>*> s;
-        BinTreeNode<T>* p = root;
-        s.push(nullptr);  // 与课件中的空指针哨兵一致
+        std::stack<BinTreeNode<T>*> nodeStack;
+        BinTreeNode<T>* currentNode = root;
+        nodeStack.push(nullptr);  // 与课件中的空指针哨兵一致
 
-        while (p != nullptr) {
-            visit(p);
+        while (currentNode != nullptr) {
+            visit(currentNode);
 
-            if (p->rightChild != nullptr)
-                s.push(p->rightChild);
+            if (currentNode->rightChild != nullptr)
+                nodeStack.push(currentNode->rightChild);
 
-            if (p->leftChild != nullptr) {
-                p = p->leftChild;
+            if (currentNode->leftChild != nullptr) {
+                currentNode = currentNode->leftChild;
             }
             else {
-                p = s.top();
-                s.pop();
+                currentNode = nodeStack.top();
+                nodeStack.pop();
             }
         }
     }
 
     void inOrderNonRecursive(std::function<void(BinTreeNode<T>*)> visit) const {
-        std::stack<BinTreeNode<T>*> s;
-        BinTreeNode<T>* p = root;
+        std::stack<BinTreeNode<T>*> nodeStack;
+        BinTreeNode<T>* currentNode = root;
 
         do {
-            while (p != nullptr) {
-                s.push(p);
-                p = p->leftChild;
+            while (currentNode != nullptr) {
+                nodeStack.push(currentNode);
+                currentNode = currentNode->leftChild;
             }
 
-            if (!s.empty()) {
-                p = s.top();
-                s.pop();
-                visit(p);
-                p = p->rightChild;
+            if (!nodeStack.empty()) {
+                currentNode = nodeStack.top();
+                nodeStack.pop();
+                visit(currentNode);
+                currentNode = currentNode->rightChild;
             }
-        } while (p != nullptr || !s.empty());
+        } while (currentNode != nullptr || !nodeStack.empty());
     }
 
     void postOrderNonRecursive(std::function<void(BinTreeNode<T>*)> visit) const {
-        enum class Tag { L, R };
+        enum class Tag { Left, Right };
 
         struct StackNode {
-            BinTreeNode<T>* ptr;
+            BinTreeNode<T>* node;
             Tag tag;
         };
 
-        std::stack<StackNode> s;
-        BinTreeNode<T>* p = root;
+        std::stack<StackNode> nodeStack;
+        BinTreeNode<T>* currentNode = root;
 
         do {
-            while (p != nullptr) {
-                s.push({p, Tag::L});
-                p = p->leftChild;
+            while (currentNode != nullptr) {
+                nodeStack.push({currentNode, Tag::Left});
+                currentNode = currentNode->leftChild;
             }
 
             bool continuePop = true;
-            while (continuePop && !s.empty()) {
-                StackNode w = s.top();
-                s.pop();
-                p = w.ptr;
+            while (continuePop && !nodeStack.empty()) {
+                StackNode stackEntry = nodeStack.top();
+                nodeStack.pop();
+                currentNode = stackEntry.node;
 
-                if (w.tag == Tag::L) {
+                if (stackEntry.tag == Tag::Left) {
                     // 从左边来的，说明左子树处理完了，去处理右子树
-                    w.tag = Tag::R;
-                    s.push(w);
+                    stackEntry.tag = Tag::Right;
+                    nodeStack.push(stackEntry);
                     continuePop = false;
-                    p = p->rightChild;
+                    currentNode = currentNode->rightChild;
                 }
                 else {
                     // 从右边来的，左右都处理完了，访问根节点
-                    visit(p);
+                    visit(currentNode);
                 }
             }
-        } while (!s.empty());
+        } while (!nodeStack.empty());
     }
 
     // ---------- 层次序遍历 ----------
@@ -184,23 +185,23 @@ public:
         if (root == nullptr)
             return;
 
-        std::queue<BinTreeNode<T>*> q;
-        BinTreeNode<T>* p = root;
-        visit(p);
-        q.push(p);
+        std::queue<BinTreeNode<T>*> pendingNodes;
+        BinTreeNode<T>* currentNode = root;
+        visit(currentNode);
+        pendingNodes.push(currentNode);
 
-        while (!q.empty()) {
-            p = q.front();
-            q.pop();
+        while (!pendingNodes.empty()) {
+            currentNode = pendingNodes.front();
+            pendingNodes.pop();
 
-            if (p->leftChild != nullptr) {
-                visit(p->leftChild);
-                q.push(p->leftChild);
+            if (currentNode->leftChild != nullptr) {
+                visit(currentNode->leftChild);
+                pendingNodes.push(currentNode->leftChild);
             }
 
-            if (p->rightChild != nullptr) {
-                visit(p->rightChild);
-                q.push(p->rightChild);
+            if (currentNode->rightChild != nullptr) {
+                visit(currentNode->rightChild);
+                pendingNodes.push(currentNode->rightChild);
             }
         }
     }
@@ -221,61 +222,61 @@ public:
         destroy(root);
         root = nullptr;
 
-        std::stack<BinTreeNode<T>*> s;
-        BinTreeNode<T>* p = nullptr;
-        int flag = 0;  // 1: 左子女，2: 右子女
+        std::stack<BinTreeNode<T>*> nodeStack;
+        BinTreeNode<T>* currentNode = nullptr;
+        int childSide = 0;  // 1: 左子女，2: 右子女
 
-        for (char ch : input) {
-            if (ch == '#') {
+        for (char character : input) {
+            if (character == '#') {
                 return root != nullptr;
             }
-            if (std::isspace(static_cast<unsigned char>(ch))) {
+            if (std::isspace(static_cast<unsigned char>(character))) {
                 continue;
             }
 
-            switch (ch) {
+            switch (character) {
                 case '(':
-                    if (p == nullptr) {
+                    if (currentNode == nullptr) {
                         destroy(root);
                         root = nullptr;
                         return false;
                     }
-                    s.push(p);
-                    flag = 1;
+                    nodeStack.push(currentNode);
+                    childSide = 1;
                     break;
 
                 case ')':
-                    if (s.empty()) {
+                    if (nodeStack.empty()) {
                         destroy(root);
                         root = nullptr;
                         return false;
                     }
-                    s.pop();
+                    nodeStack.pop();
                     break;
 
                 case ',':
-                    flag = 2;
+                    childSide = 2;
                     break;
 
                 default: {
-                    p = new BinTreeNode<T>(static_cast<T>(ch));
+                    currentNode = new BinTreeNode<T>(static_cast<T>(character));
                     if (root == nullptr) {
-                        root = p;
+                        root = currentNode;
                     } else {
-                        if (s.empty()) {
-                            delete p;
+                        if (nodeStack.empty()) {
+                            delete currentNode;
                             destroy(root);
                             root = nullptr;
                             return false;
                         }
 
-                        BinTreeNode<T>* parent = s.top();
-                        if (flag == 1) {
-                            parent->leftChild = p;
-                        } else if (flag == 2) {
-                            parent->rightChild = p;
+                        BinTreeNode<T>* parentNode = nodeStack.top();
+                        if (childSide == 1) {
+                            parentNode->leftChild = currentNode;
+                        } else if (childSide == 2) {
+                            parentNode->rightChild = currentNode;
                         } else {
-                            delete p;
+                            delete currentNode;
                             destroy(root);
                             root = nullptr;
                             return false;
@@ -340,14 +341,14 @@ protected:
         }
     }
 
-    BinTreeNode<T>* Copy(BinTreeNode<T>* r) const {
-        if (r == nullptr)
+    BinTreeNode<T>* Copy(BinTreeNode<T>* sourceRoot) const {
+        if (sourceRoot == nullptr)
             return nullptr;
 
-        BinTreeNode<T>* temp = new BinTreeNode<T>(r->data);
-        temp->leftChild = Copy(r->leftChild);
-        temp->rightChild = Copy(r->rightChild);
-        return temp;
+        BinTreeNode<T>* copiedRoot = new BinTreeNode<T>(sourceRoot->data);
+        copiedRoot->leftChild = Copy(sourceRoot->leftChild);
+        copiedRoot->rightChild = Copy(sourceRoot->rightChild);
+        return copiedRoot;
     }
 
     int Height(BinTreeNode<T>* subTree) const {
@@ -365,17 +366,17 @@ protected:
         return Size(subTree->leftChild) + Size(subTree->rightChild) + 1;
     }
 
-    BinTreeNode<T>* Parent(BinTreeNode<T>* subTree, BinTreeNode<T>* t) const {
+    BinTreeNode<T>* Parent(BinTreeNode<T>* subTree, BinTreeNode<T>* targetNode) const {
         if (subTree == nullptr)
             return nullptr;
 
-        if (subTree->leftChild == t || subTree->rightChild == t)
+        if (subTree->leftChild == targetNode || subTree->rightChild == targetNode)
             return subTree;
 
-        BinTreeNode<T>* p = Parent(subTree->leftChild, t);
-        if (p != nullptr)
-            return p;
-        return Parent(subTree->rightChild, t);
+        BinTreeNode<T>* parentNode = Parent(subTree->leftChild, targetNode);
+        if (parentNode != nullptr)
+            return parentNode;
+        return Parent(subTree->rightChild, targetNode);
     }
 
     BinTreeNode<T>* Find(BinTreeNode<T>* subTree, const T& item) const {
@@ -385,9 +386,9 @@ protected:
         if (subTree->data == item)
             return subTree;
 
-        BinTreeNode<T>* p = Find(subTree->leftChild, item);
-        if (p != nullptr)
-            return p;
+        BinTreeNode<T>* foundNode = Find(subTree->leftChild, item);
+        if (foundNode != nullptr)
+            return foundNode;
         return Find(subTree->rightChild, item);
     }
 
@@ -438,8 +439,8 @@ protected:
         swapChildren(subTree->leftChild);
         swapChildren(subTree->rightChild);
 
-        BinTreeNode<T>* temp = subTree->leftChild;
+        BinTreeNode<T>* previousLeftChild = subTree->leftChild;
         subTree->leftChild = subTree->rightChild;
-        subTree->rightChild = temp;
+        subTree->rightChild = previousLeftChild;
     }
 };
