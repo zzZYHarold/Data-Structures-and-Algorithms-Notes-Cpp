@@ -3,7 +3,7 @@
 #include <functional>
 
 // 5.4 线索化二叉树
-// 依据 2026 秋 part2 第 90-121 页整理。
+// 依据 2026 秋完整课件第 90-121 页整理。
 
 template <class T>
 struct ThreadNode {

@@ -24,10 +24,10 @@
 | 5.2–5.3 | 二叉树及其遍历、建树等操作 | [tree/](./tree/) | `BinaryTree.h` |
 | 5.4 | 线索二叉树 | [tree/](./tree/) | `ThreadTree.h` |
 | 5.5 | 树与森林：子女—兄弟表示、树的遍历 | [tree/](./tree/) | `Tree.h` |
-| 5.6 | 最小堆 | [tree/](./tree/) | `MinHeap.h` |
+| 5.6 | 最小堆、关键码与附加数据 | [tree/](./tree/) | `MinHeap.h`（`Element`、`MinHeap`） |
 | 5.7 | Huffman 树 | [tree/](./tree/) | `HuffmanTree.h` |
 
-第五章的 **5.1–5.5** 已按 2026 秋正式课件整理（part1、part2）；**5.6–5.7** 目前依据 2025 秋课件作为预习版，待 2026 秋对应课件发布后再校准。具体实现范围与修正见 [tree/README.md](./tree/README.md)。
+第五章 **5.1–5.7** 已统一按 2026 秋完整正式课件整理。具体实现范围、课件勘误和接口用法见 [tree/README.md](./tree/README.md)。
 
 ## 项目约定
 

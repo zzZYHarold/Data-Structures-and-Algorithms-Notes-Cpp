@@ -8,7 +8,7 @@
 #include <functional>
 
 // 5.2-5.3 二叉树及遍历
-// 以 2026 秋课件 part1 为主整理。
+// 依据 2026 秋完整课件第 37-88 页整理。
 
 template <class T>
 struct BinTreeNode {

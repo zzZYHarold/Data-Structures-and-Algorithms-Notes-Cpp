@@ -4,9 +4,9 @@
 
 ## 课件来源
 
-- **5.1～5.3：以 2026 秋 `Lesson 5 (2026秋)-CS - part1.pdf` 为准。**
-- **5.4～5.5：已按 2026 秋 `Lesson 5 (2026秋)-CS - part2.pdf` 更新。** 本份文件共 146 页，正文止于 5.5 的后根遍历；目录页中的 5.6、5.7 尚未展开。
-- **5.6～5.7：仍暂以 2025 秋课件为预习版依据。** 后续拿到 2026 秋对应课件后再校准。
+**5.1～5.7 统一以 2026 秋 `Lesson 5 (2026秋)-CS.pdf` 完整课件为准。** 文件共 197 页，包含第五章全部小节及末页总结。
+
+完整课件的前 146 页与此前 part2 一致；新增的第 147～155 页完成 5.5 的树与森林遍历，第 157～177 页展开堆，第 178～196 页展开 Huffman 树与编码。所有页码均指 PDF 页序。
 
 2026 part1 已覆盖的核心代码包括：二叉树结点/类结构、父结点查找、销毁、广义表建树、递归/非递归遍历、结点数、高度、复制、前序序列建树、广义表输出、层次序遍历和交换左右子树等。
 
@@ -31,7 +31,7 @@ tree/
 
 ### `include/BinaryTree.h`
 
-对应 5.2～5.3，依据 **2026 秋 part1**：
+对应 5.2～5.3，代码见完整课件第 37～88 页：
 
 - `BinTreeNode<T>` 二叉链表结点
 - `BinaryTree<T>` 二叉树类
@@ -50,7 +50,7 @@ tree/
 
 ### `include/ThreadTree.h`
 
-对应 5.4，依据 **2026 秋 part2 第 90～121 页**：
+对应 5.4，依据完整课件第 90～121 页：
 
 - `ThreadNode<T>` 线索二叉树结点
 - `ltag / rtag`
@@ -66,7 +66,7 @@ tree/
 
 ### `include/Tree.h`
 
-对应 5.5，依据 **2026 秋 part2 第 123～146 页**：
+对应 5.5，依据完整课件第 123～155 页：
 
 - 树的子女-兄弟表示
 - `TreeNode<T>`
@@ -86,15 +86,17 @@ TreeNode<char>* parentNode = tree.Parent(child);  // 返回 rootNode
 TreeNode<char>* foundNode = tree.Find('B');       // 返回 child，未找到时返回 nullptr
 ```
 
-`Find()` 在课件中只有声明，仓库按先根次序补全查找，重复值返回首次匹配。第 144～146 页给出了遍历规则，仓库据此补成 `PreOrder()`、`PostOrder()`、`LevelOrder()`，回调参数均为 `TreeNode<T>*`。对于课件中的 `A(B(E,F),C,D(G))`，三种遍历结果分别为 `ABEFCDG`、`EFBCGDA`、`ABCDEFG`。
+`Find()` 在课件中只有声明，仓库按先根次序补全查找，重复值返回首次匹配。第 145～146 页给出了先根、后根遍历规则，仓库据此补成 `PreOrder()`、`PostOrder()`；完整课件第 147～148 页正式给出 `LevelOrder()` 的队列算法，当前实现已与之对齐。回调参数均为 `TreeNode<T>*`。对于课件中的 `A(B(E,F),C,D(G))`，三种遍历结果分别为 `ABEFCDG`、`EFBCGDA`、`ABCDEFG`。
+
+第 149～155 页继续给出森林的先根、后根与层次序遍历规则及示例，但没有独立森林类的完整代码；当前不另建 `Forest` 类。
 
 树与二叉树、森林与二叉树之间的转换在课件中主要以规则和示意图讲解，没有给出完整转换函数，因此这里没有凭空增加转换 API。
 
 ### `include/MinHeap.h`
 
-对应 5.6，暂依据 **2025 秋课件**：
+对应 5.6，依据完整课件第 157～177 页：
 
-- 最小优先级队列抽象接口 `MinPQ`
+- `Element<T, E>`：`T key` 保存关键码，`E other` 保存附加数据；比较只看 `key`
 - 最小堆 `MinHeap`
 - 数组顺序存储
 - 筛选法建堆
@@ -105,15 +107,31 @@ TreeNode<char>* foundNode = tree.Find('B');       // 返回 child，未找到时
 
 保持课件中“完全二叉树 + 数组”的核心设计，没有使用 `std::priority_queue` 替代堆的核心实现。
 
+`MinHeap<T, E>` 的两个模板参数现在分别代表关键码类型、附加数据类型，`Insert()`、`Remove()` 和数组建堆接口均使用 `Element<T, E>`。原预习版直接传入裸 `E` 的调用应改为元素对象；原 `MinPQ` 抽象类已按正式课件中的 `MinHeap` 类定义移除。例如：
+
+```cpp
+MinHeap<int, char> heap;
+heap.Insert(Element<int, char>(7, 'A'));
+heap.Insert(Element<int, char>(2, 'C'));
+Element<int, char> minimumElement;
+heap.Remove(minimumElement);  // key == 2，other == 'C'
+```
+
+默认容量下限为 20；堆满或堆空时，插入或删除返回 `false`。`MakeEmpty()` 清空元素计数，`Size()` 返回元素个数，`data()` 返回只读的 `Element` 数组。若 `other` 保存指针，堆不负责释放其指向的对象。
+
 ### `include/HuffmanTree.h`
 
-对应 5.7，暂依据 **2025 秋课件**：
+对应 5.7，依据完整课件第 178～196 页：
 
 - Huffman 结点
 - 使用最小堆维护森林
 - 每次取两个最小权值结点合并
 - 建立 Huffman 树
 - 计算带权路径长度 WPL
+
+保留课件的 `HuffmanTree<T, E>`、`HuffmanNode<T, E>` 类名与模板形式；`E` 是数值权值类型，`T` 当前没有用于保存字符。输入权值数组采用 0-based 下标，权值应为非负频度或概率。建树的森林堆使用 `MinHeap<E, HuffmanNode<T, E>*>`，`Element.key` 为根权值，`Element.other` 为根结点指针；结点独立分配，地址不会随堆元素搬移而失效。
+
+课件频度 `{2, 7, 4, 5}` 建成的树根权值为 `18`，WPL 为 `35`。空输入生成空树，单个权值生成一个叶结点，其深度和 WPL 均为 `0`。默认构造、`build()` 重建、`getRoot()` 与 `weightedPathLength()` 是便于使用的补充接口。
 
 课件对 Huffman 编码给出了构造思想和例子，但没有给出一套完整的“字符 → 编码串”类接口，所以本次主要整理其**建树实现**；编码映射暂不额外设计。
 
@@ -137,14 +155,20 @@ TreeNode<char>* foundNode = tree.Find('B');       // 返回 child，未找到时
    课件算法默认输入合法；整理版跳过空白，并对括号栈明显不合法的情况返回 `false`。
 
 6. **修正 Huffman 课件代码中的明显接口/生命周期问题。**
-   原课件片段中存在 `Parent/parent` 大小写不一致、`w[i+1]` 越界风险、`bt1.root` 与结点类型不匹配，以及把堆中取出的对象引用直接作为长期子结点地址等问题。整理版仍使用“最小堆反复取两个最小权值并合并”的原算法，但堆中保存“权值 + 结点指针”，保证结点地址稳定。
+   第 190～192 页使用 `minHeap/MinHeap` 混合命名，引用变量没有绑定对象，`w[i+1]` 假定输入为 1-based，直接向 `Element` 堆插入结点的类型也不匹配。合并函数对引用使用 `->`，并将数值权值写成 `data.key`；堆内对象地址也不能作为长期子结点地址。仓库统一采用 0-based 数值权值和 `Element<权值类型, 结点指针>`，按原算法反复取出两棵最小权值的树并合并。
 
 7. **补充 part2 中的空指针与线索判断。**
    `Tree::FindParent()` 补充空子树检查；`ThreadTree::First/Last()` 处理空指针；线索双亲查找只把真实子女指针视为双亲关系。线索化递归也检查标志位，避免重复调用时沿已有线索进入循环。另外，`BinaryTree::Parent(nullptr)` 明确返回空指针，避免误认缺少子女的结点为双亲。
 
+8. **统一堆元素及删除接口。**
+   第 177 页的 `MinHeap<T>::Remove(E&)` 与第 161～162 页的 `Element<T, E>` 存储不一致，仓库统一为 `MinHeap<T, E>::Remove(Element<T, E>&)`。比较与赋值支持 `const` 对象；数组建堆从 `currentSize / 2 - 1` 开始，删除最后一个元素后跳过下滑调整，明确处理空堆、单元素堆。
+
+9. **修正树的层次序遍历起点。**
+   第 148 页用未定义的 `t` 初始化遍历指针；当前实现从本树的 `root` 入队，沿每个结点的子女链依次入队。
+
 ## 变量命名
 
-5.1～5.5 对应代码中的形参与局部变量改为便于阅读的名称，类名与主要公开操作名继续与课件对应。例如第 135 页的双亲查找：
+第五章代码中的形参与局部变量使用便于阅读的名称，类名与主要公开操作名继续与课件对应。例如第 135 页的双亲查找：
 
 | 课件名称 | 仓库名称 | 含义 |
 | --- | --- | --- |
@@ -155,6 +179,8 @@ TreeNode<char>* foundNode = tree.Find('B');       // 返回 child，未找到时
 
 线索化中的 `pre` 改为 `previousNode`；遍历的栈和队列使用 `nodeStack`、`pendingNodes` 等名字。保留 `ltag/rtag`、`RefValue` 等明确的课件术语，并在代码中解释含义。
 
+堆调整使用 `parentIndex`、`childIndex`、`smallerChildIndex`、`savedElement`；Huffman 建树使用 `weights`、`leafCount`、`forestHeap`、`firstTree`、`secondTree`、`parentNode`。
+
 ## 为完整性增加的补充
 
 以下不是课件逐行给出的代码，但属于使整理后的类可独立使用所需的少量补充：
@@ -162,10 +188,11 @@ TreeNode<char>* foundNode = tree.Find('B');       // 返回 child，未找到时
 - `BinaryTree` 的复制赋值运算符，避免含动态内存的类发生浅拷贝。
 - `BinaryTree::Find()` 的普通递归查找实现；课件接口中列出了 `Find`，但当前 part1 未给出完整函数体。
 - `ThreadTree::setRoot()`、`getRoot()` 和析构清理，用于构造和管理完整对象。
-- `ThreadTree::inOrder()` 用课件 `First/Next` 接口完成遍历；`Tree` 的三种遍历按课件规则补全。
+- `ThreadTree::inOrder()` 用课件 `First/Next` 接口完成遍历；`Tree` 的先根、后根遍历按课件规则补全。
 - `Tree::BuildRoot()`、`InsertChild()`，用于建立子女-兄弟表示的树；命名与 5.1 抽象接口中的 `BuildRoot` 保持一致。
 - `Tree::Find()` 和子树释放，课件只给出声明。`Tree` 与 `ThreadTree` 暂禁用复制构造和复制赋值，避免默认浅拷贝导致重复释放结点；`InsertChild()` 的父结点必须来自本树，`ThreadTree` 接管构造函数或 `setRoot()` 传入的独立树的所有权。
 - `MinHeap::Size()` / `data()`，便于检查堆状态，不参与核心算法。
+- `Element` 的默认初始化和便捷构造函数；堆与 Huffman 建树检查负容量、负元素数量及非空输入的空数组指针，非法参数抛出 `std::invalid_argument`。`MinHeap` 与 `HuffmanTree` 禁用默认复制，避免浅拷贝导致重复释放。
 - `HuffmanTree::weightedPathLength()`，直接对应课件定义的 WPL。
 
 ## 暂未补全的内容
@@ -181,3 +208,5 @@ TreeNode<char>* foundNode = tree.Find('B');       // 返回 child，未找到时
 `course_code` 中列出的头文件不会自动实例化模板，所以模板实现另用临时 C++20 测试文件验证，该测试文件不放入仓库。
 
 2026-09-30 更新已通过 `course_code` 构建，以及开启 `-Wall -Wextra -pedantic`、AddressSanitizer 和 UndefinedBehaviorSanitizer 的 C++20 编译与运行检查。验证包含课件树的三种遍历、结点访问与双亲查找、二叉树递归/非递归遍历，以及 0～7 个结点的全部 626 种二叉树形态下的线索前驱、后继、双亲和重复线索化。
+
+2026-10-09 完整版更新已通过同样的 C++20 编译、AddressSanitizer、UndefinedBehaviorSanitizer 检查和 `course_code` 构建。堆测试包含课件数组建堆、关键码与附加数据一致性、4000 次混合操作、空堆/满堆/单元素及非法输入；Huffman 测试包含结构和双亲指针、WPL=35 的课件示例、WPL=2.15 的概率示例、80 组小规模权值与穷举最优 WPL 对照，以及 64 个叶结点和重复建树。

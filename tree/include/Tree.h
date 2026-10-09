@@ -4,7 +4,7 @@
 #include <queue>
 
 // 5.5 树与森林：子女-兄弟表示
-// 依据 2026 秋 part2 第 129-146 页整理。
+// 依据 2026 秋完整课件第 129-155 页整理。
 
 template <class T>
 struct TreeNode {
@@ -89,7 +89,7 @@ public:
     }
 
     // 课件第 145 页的先根规则：访问根，再依次遍历各子树。
-    // 以下遍历按课件规则补成实现，课件未给出完整 C++ 函数体。
+    // 先根、后根遍历按课件规则补成实现，课件未给出完整 C++ 函数体。
     void PreOrder(const std::function<void(TreeNode<T>*)>& visit) const {
         PreOrder(root, visit);
     }
@@ -99,7 +99,7 @@ public:
         PostOrder(root, visit);
     }
 
-    // 第 144 页列出的广度优先遍历；队列仅作为辅助结构。
+    // 第 147-148 页：按队列分层访问，再依次将各子女入队。
     void LevelOrder(const std::function<void(TreeNode<T>*)>& visit) const {
         if (root == nullptr)
             return;
