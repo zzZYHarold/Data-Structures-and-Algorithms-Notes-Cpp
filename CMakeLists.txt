@@ -59,3 +59,12 @@ add_executable(array_example
 target_include_directories(stack_example PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
+
+add_executable(chapter6_example
+        dictionary/examples/chapter6.cpp
+        set/src/UFSets.cpp
+        set/src/SetApplications.cpp
+)
+target_include_directories(chapter6_example PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
