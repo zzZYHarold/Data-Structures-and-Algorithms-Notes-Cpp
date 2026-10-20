@@ -28,12 +28,12 @@
 | 5.7 | Huffman 树 | [tree/](./tree/) | `HuffmanTree.h` |
 | 6.1 | 位向量集合、有序链表集合 | [set/](./set/) | `bitSet.h`、`LinkedSet.h` |
 | 6.2 | 并查集、等价类、省份问题 | [set/](./set/) | `UFSets.h/.cpp`、`SetApplications.h/.cpp` |
-| 6.3 | 字典、有序顺序表、顺序/折半搜索 | [dictionary/](./dictionary/) | `DictionaryEntry.h`、`SortedList.h` |
-| 6.4 | 散列：线性/平方探查、二次散列、链地址法 | [dictionary/](./dictionary/) | `HashTable.h`、`ChainedHashTable.h`、`examples/chapter6.cpp` |
+| 6.3 | 字典、有序顺序表/链表、搜索、跳表概念及双向搜索练习 | [dictionary/](./dictionary/) | `SortedList.h`、`SortedChain.h`、`BidirectionalSearch.h/.cpp`（跳表仅概念说明） |
+| 6.4 | 散列：线性/平方/双向二次探查、双散列、链地址法 | [dictionary/](./dictionary/) | `HashTable.h`、`ChainedHashTable.h`、`examples/chapter6.cpp` |
 
 第五章 **5.1–5.7** 已统一按 2026 秋完整正式课件整理。具体实现范围、课件勘误和接口用法见 [tree/README.md](./tree/README.md)。
 
-第六章 **6.1–6.4** 按 `Lesson 6 (2025秋季)-BeibeiWang-final.pdf` 整理为课前预习版，待 2026 秋课件到位后核对。课件代码、依据规则补写的实现及接口约定见 [set/README.md](./set/README.md) 和 [dictionary/README.md](./dictionary/README.md)。运行 `chapter6_example` 可查看课件集合运算、等价类、省份问题、搜索与散列表例子。
+第六章 **6.1–6.4** 已统一按 `Lesson 6 (2026秋)-CS(1).pdf`（136 页）完整正式课件核对。散列部分区分单向平方探查与 `H₀,+1,-1,+4,-4,…` 双向二次探查，并补充表长 19 的二次探查、表长 11 的双散列例子及 ASL 检查。版本、实现范围、接口约定和课件勘误见 [set/README.md](./set/README.md) 和 [dictionary/README.md](./dictionary/README.md)，运行目标为 `chapter6_example`。
 
 ## 项目约定
 

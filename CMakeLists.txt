@@ -62,6 +62,7 @@ target_include_directories(stack_example PRIVATE
 
 add_executable(chapter6_example
         dictionary/examples/chapter6.cpp
+        dictionary/src/BidirectionalSearch.cpp
         set/src/UFSets.cpp
         set/src/SetApplications.cpp
 )

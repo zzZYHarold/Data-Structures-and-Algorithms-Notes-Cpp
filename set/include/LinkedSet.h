@@ -11,7 +11,7 @@ struct SetNode {
 };
 
 // 6.1 有序链表集合：first 为头结点，last 为尾结点，成员严格递增。
-// 课件只有声明；以下操作按有序链表及双指针归并规则补全。
+// 2026 秋正式课件第 20~32 页：并、交、差原地修改左操作数，返回自身引用。
 template <class T>
 class LinkedSet {
     SetNode<T>* first;
@@ -100,57 +100,86 @@ public:
         return true;
     }
 
-    LinkedSet operator+(const LinkedSet& other) const {
-        LinkedSet result;
-        auto* leftMember = first->link;
-        auto* rightMember = other.first->link;
-
-        while (leftMember || rightMember) {
-            if (!rightMember || (leftMember && leftMember->data < rightMember->data)) {
-                result.append(leftMember->data);
-                leftMember = leftMember->link;
-            } else if (!leftMember || leftMember->data > rightMember->data) {
-                result.append(rightMember->data);
-                rightMember = rightMember->link;
-            } else {
-                result.append(leftMember->data);
-                leftMember = leftMember->link;
-                rightMember = rightMember->link;
-            }
-        }
-        return result;
-    }
-
-    LinkedSet operator*(const LinkedSet& other) const {
-        LinkedSet result;
+    LinkedSet& operator+(const LinkedSet& other) {
+        if (this == &other) return *this;
+        auto* previousNode = first;
         auto* leftMember = first->link;
         auto* rightMember = other.first->link;
 
         while (leftMember && rightMember) {
-            if (leftMember->data < rightMember->data)
+            if (leftMember->data == rightMember->data) {
+                previousNode = leftMember;
                 leftMember = leftMember->link;
-            else if (leftMember->data > rightMember->data)
                 rightMember = rightMember->link;
-            else {
-                result.append(leftMember->data);
+            } else if (leftMember->data < rightMember->data) {
+                previousNode = leftMember;
+                leftMember = leftMember->link;
+            } else {
+                previousNode->link = new SetNode<T>(rightMember->data, leftMember);
+                previousNode = previousNode->link;
+                rightMember = rightMember->link;
+            }
+        }
+        // this 剩余的结点已经在原链中；只复制 other 剩余的结点。
+        while (rightMember) {
+            append(rightMember->data);
+            rightMember = rightMember->link;
+        }
+        return *this;
+    }
+
+    LinkedSet& operator*(const LinkedSet& other) {
+        if (this == &other) return *this;
+        auto* previousNode = first;
+        auto* leftMember = first->link;
+        auto* rightMember = other.first->link;
+
+        while (leftMember && rightMember) {
+            if (leftMember->data < rightMember->data) {
+                previousNode->link = leftMember->link;
+                delete leftMember;
+                leftMember = previousNode->link;
+            } else if (rightMember->data < leftMember->data) {
+                rightMember = rightMember->link;
+            } else {
+                previousNode = leftMember;
                 leftMember = leftMember->link;
                 rightMember = rightMember->link;
             }
         }
-        return result;
+        while (leftMember) {
+            previousNode->link = leftMember->link;
+            delete leftMember;
+            leftMember = previousNode->link;
+        }
+        last = previousNode;
+        return *this;
     }
 
-    LinkedSet operator-(const LinkedSet& other) const {
-        LinkedSet result;
+    LinkedSet& operator-(const LinkedSet& other) {
+        if (this == &other) {
+            makeEmpty();
+            return *this;
+        }
+        auto* previousNode = first;
+        auto* leftMember = first->link;
         auto* rightMember = other.first->link;
 
-        for (auto* leftMember = first->link; leftMember; leftMember = leftMember->link) {
-            while (rightMember && rightMember->data < leftMember->data)
+        while (leftMember && rightMember) {
+            if (leftMember->data == rightMember->data) {
                 rightMember = rightMember->link;
-            if (!rightMember || !(rightMember->data == leftMember->data))
-                result.append(leftMember->data);
+                previousNode->link = leftMember->link;
+                if (last == leftMember) last = previousNode;
+                delete leftMember;
+                leftMember = previousNode->link;
+            } else if (leftMember->data < rightMember->data) {
+                previousNode = leftMember;
+                leftMember = leftMember->link;
+            } else {
+                rightMember = rightMember->link;
+            }
         }
-        return result;
+        return *this;
     }
 
     bool subSet(const LinkedSet& other) const {

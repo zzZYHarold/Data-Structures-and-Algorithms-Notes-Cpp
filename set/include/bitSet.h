@@ -7,7 +7,7 @@
 #include <type_traits>
 #include <utility>
 
-// 6.1 位向量集合：每个 16 位字从高位到低位表示 16 个成员。
+// 6.1 位向量集合（2026 秋正式课件第 9~19 页）：每个 16 位字从高位到低位表示 16 个成员。
 // 课件漏写了模板声明；T 必须是整数类型，成员范围为 [0, setSize)。
 template <class T = int>
 class bitSet {
