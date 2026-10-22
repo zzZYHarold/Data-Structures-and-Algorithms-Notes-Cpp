@@ -1,23 +1,17 @@
-# 数组与矩阵（第四章 4.1–4.3）
+# 第四章：数组与矩阵
 
-本目录整理《Lesson 4 (2026秋)-CS》中的 4.1–4.3：一维/多维数组、特殊矩阵和稀疏矩阵。
+**4.1–4.3 依据《Lesson 4 (2026秋)-CS》整理。** 内容包括一维/多维数组、特殊矩阵和稀疏矩阵；4.4 字符串见 [string/README.md](../string/README.md)，4.5 广义表见 [generalized_list/README.md](../generalized_list/README.md)。
 
-## 目录
+## 文件与课件对应
 
-```text
-array/
-├── include/
-│   ├── ArrayStorage.h
-│   ├── SymmetricMatrix.h
-│   ├── TriDiagonalMatrix.h
-│   ├── BandMatrix.h
-│   └── SparseMatrix.h
-├── src/
-│   └── ArrayStorage.cpp
-├── examples/
-│   └── image_flip.cpp      # 可选，需要 OpenCV
-└── README.md
-```
+| 文件 | 课件内容 | 实现来源 |
+| --- | --- | --- |
+| `include/ArrayStorage.h`、`src/ArrayStorage.cpp` | 4.1，一维/多维数组的地址映射 | 将课件地址公式整理为普通函数 |
+| `examples/image_flip.cpp` | 4.1，灰度图/彩色图左右翻转 | 课件案例的可选示例，依赖 OpenCV |
+| `include/SymmetricMatrix.h` | 4.2，对称矩阵压缩存储 | 按课件公式补成模板实现 |
+| `include/TriDiagonalMatrix.h` | 4.2，三对角矩阵压缩存储 | 按课件公式补全，核心映射为 `k = 2*i + j` |
+| `include/BandMatrix.h` | 4.2，多对角（带状）矩阵 | 保留课件 `A -> A' -> B` 过渡矩阵方案 |
+| `include/SparseMatrix.h` | 4.3，稀疏矩阵三元组表示 | 转置、快速转置与加法按 Part 2 算法；乘法为补充实现 |
 
 ## 4.1 一维数组与多维数组
 

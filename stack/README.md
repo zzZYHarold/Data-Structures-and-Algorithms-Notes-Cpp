@@ -1,20 +1,18 @@
-# 第三章 3.1–3.2：栈与递归
+# 第三章：栈与递归
 
-3.1 的第一讲课件正文只讲栈；后续完整课件中的 3.2「栈与递归」也整理在本目录。3.3–3.5 的队列内容见 `queue/`。
+**本目录整理第三章 3.1–3.2：栈及其应用、栈与递归。** 3.1 的第一讲课件正文只讲栈；后续完整课件中的 3.2「栈与递归」也整理在本目录。3.3–3.5 的队列内容见 [queue/README.md](../queue/README.md)。
 
-## 内容对应
+## 文件与课件对应
 
-| 课件内容 | 页码 | 代码 |
-|---|---:|---|
-| 栈的抽象数据类型 | 10 | `include/Stack.h` |
-| 顺序栈 | 11~17 | `include/SeqStack.h` |
-| 双栈共享一个栈空间 | 18~21 | `include/DualStack.h` |
-| 链式栈 | 22~29 | `include/LinkedStack.h` |
-| 括号匹配 | 30~35 | `src/StackApplications.cpp` |
-| 中缀表达式求值 | 41~45 | `src/StackApplications.cpp` |
-| 后缀表达式求值 | 46~50 | `src/StackApplications.cpp` |
-| 中缀转后缀 | 51~53 | `src/StackApplications.cpp` |
-| 3.2 阶乘、汉诺塔、斐波那契及逆序输出 | 完整课件 | `include/RecursionExamples.h` + `src/RecursionExamples.cpp` |
+| 文件 | 课件内容 | 实现来源 |
+| --- | --- | --- |
+| `include/Stack.h` | 3.1，第 10 页，栈的抽象数据类型 | 保留课件操作命名，增加虚析构并统一接口 |
+| `include/SeqStack.h` | 第 11–17 页，顺序栈 | 保留数组栈实现，补充扩容步长 |
+| `include/DualStack.h` | 第 18–21 页，双栈共享空间 | 按课件设计补齐类定义、构造/析构与查询操作 |
+| `include/LinkedStack.h` | 第 22–29 页，链式栈 | 保留链式实现，修正声明与定义不一致等问题 |
+| `include/StackApplications.h`、`src/StackApplications.cpp` | 第 30–35 页括号匹配；第 41–45 页中缀求值；第 46–50 页后缀求值；第 51–53 页中缀转后缀 | 括号匹配改用具体栈类；后缀求值支持多位数和小数；中缀求值与转换按课件规则补全 |
+| `include/RecursionExamples.h`、`src/RecursionExamples.cpp` | 完整课件 3.2，阶乘、汉诺塔、斐波那契及逆序输出 | 整理递归及相应非递归示例 |
+| `examples/main.cpp` | 栈与应用自检 | 仓库补充的断言示例，由 `stack_example` 独立构建 |
 
 ## 与课件原代码相比做的整理
 

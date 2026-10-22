@@ -1,24 +1,20 @@
-# Lesson 2：2.3–2.5 代码整理
+# 第二章：链表与多项式
 
-依据《Lesson 2 (2026秋)-CS》2.3–2.5 整理。
+**2.3–2.5 依据《Lesson 2 (2026秋)-CS》整理。** 内容包括单链表、静态链表、循环链表、双向链表、约瑟夫问题及多项式；2.1–2.2 见 [linear_list/README.md](../linear_list/README.md)。
 
-## 目录结构
+## 文件与课件对应
 
-```text
-linked_list/
-├── include/
-│   ├── LinkedList.h
-│   ├── CircList.h
-│   ├── DblList.h
-│   ├── Josephus.h
-│   ├── StaticLinkedList.h
-│   ├── Polynomial.h
-│   └── PolynomialStorage.h
-├── src/
-│   ├── StaticLinkedList.cpp
-│   └── Polynomial.cpp
-└── README.md
-```
+| 文件 | 课件内容 | 实现来源 |
+| --- | --- | --- |
+| `include/LinkedList.h` | 2.3，单链表 | 保留 `LinkNode<T>`、带附加头结点的 `List<T>`，整理查找、定位、插入、删除、建表、清空和逆置 |
+| `include/StaticLinkedList.h`、`src/StaticLinkedList.cpp` | 2.3.5，静态链表 | 按课件数组结点与 `next` 下标设计补全基本操作，空闲槽位管理为仓库约定 |
+| `include/CircList.h` | 2.4，带附加头结点的循环链表 | 保留 `Length/Search/Locate/Insert/Remove`，补充默认构造 |
+| `include/Josephus.h` | 2.4，约瑟夫问题 | 按循环链表报数，跳过附加头结点并删除第 `m` 个结点 |
+| `include/DblList.h` | 2.4，双向循环链表 | 双向查找、定位、插入和删除，统一接口与结点命名 |
+| `include/PolynomialStorage.h` | 2.5，多项式的三种顺序存储 | 静态系数数组、动态系数数组、稀疏项 `(coef, exp)` 表示 |
+| `include/Polynomial.h`、`src/Polynomial.cpp` | 2.5，多项式链表存储与加法 | 按指数升序存储非零项，按课件双指针合并流程补全加法 |
+
+## 使用与文件组织
 
 `LinkedList<T>`、`CircList<T>`、`DblList<T>` 和 `Josephus<T>` 都是模板，完整实现放在
 各自的 `.h` 中。`StaticLinkedList` 与 `Polynomial` 是普通实现，因此保留 `.h + .cpp`
@@ -31,39 +27,9 @@ linked_list/
 #include "linked_list/include/StaticLinkedList.h"
 ```
 
-## 文件对应
-
-- `include/LinkedList.h`
-  - 2.3 单链表
-  - `LinkNode<T>`、带附加头结点的 `List<T>`
-  - 查找、定位、插入、删除、建表、清空和逆置
-
-- `include/StaticLinkedList.h`、`src/StaticLinkedList.cpp`
-  - 2.3.5 静态链表
-  - 数组保存结点，`next` 保存后继结点的数组下标
-  - 初始化、判空、求长、按位访问、按值查找、插入、删除和输出
-
-- `include/CircList.h`
-  - 2.4 带附加头结点的循环链表
-  - `Length`、`Search`、`Locate`、`Insert`、`Remove`
-
-- `include/Josephus.h`
-  - 2.4 约瑟夫问题
-  - 按循环链表报数、跳过附加头结点并删除第 `m` 个结点
-
-- `include/DblList.h`
-  - 2.4 双向循环链表
-  - 双向查找、定位、插入和删除
-
-- `include/PolynomialStorage.h`
-  - 2.5 多项式的三种顺序存储表示
-  - 静态系数数组、动态系数数组、稀疏项 `(coef, exp)` 表示
-
-- `include/Polynomial.h`、`src/Polynomial.cpp`
-  - 2.5 多项式链表存储
-  - 按指数升序存储非零项，并用双指针合并完成多项式相加
-
 ## 静态链表的实现约定
+
+当前实现包括初始化、判空、求长、按位访问、按值查找、插入、删除和输出。
 
 课件给出了 `SLinkNode` 与数组存储结构，但没有规定空闲结点的管理方式。本整理版采用：
 
