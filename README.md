@@ -30,10 +30,15 @@
 | 6.2 | 并查集、等价类、省份问题 | [set/](./set/) | `UFSets.h/.cpp`、`SetApplications.h/.cpp` |
 | 6.3 | 字典、有序顺序表/链表、搜索、跳表概念及双向搜索练习 | [dictionary/](./dictionary/) | `SortedList.h`、`SortedChain.h`、`BidirectionalSearch.h/.cpp`（跳表仅概念说明） |
 | 6.4 | 散列：线性/平方/双向二次探查、双散列、链地址法 | [dictionary/](./dictionary/) | `HashTable.h`、`ChainedHashTable.h`、`examples/chapter6.cpp` |
+| 7.1（2026 预习） | 静态搜索表、监视哨/递归顺序搜索、折半搜索 | [search/](./search/) | `dataList.h`、`examples/chapter7.cpp` |
+| 7.2（2026 预习） | 二叉搜索树、递归/迭代搜索、插入、后继替补删除 | [tree/](./tree/) | `BST.h` |
+| 7.3（2026 预习） | AVL 平衡因子、四种旋转、插入及前驱替补删除 | [tree/](./tree/) | `AVLTree.h` |
 
 第五章 **5.1–5.7** 已统一按 2026 秋完整正式课件整理。具体实现范围、课件勘误和接口用法见 [tree/README.md](./tree/README.md)。
 
 第六章 **6.1–6.4** 已统一按 `Lesson 6 (2026秋)-CS(1).pdf`（136 页）完整正式课件核对。散列部分区分单向平方探查与 `H₀,+1,-1,+4,-4,…` 双向二次探查，并补充表长 19 的二次探查、表长 11 的双散列例子及 ASL 检查。版本、实现范围、接口约定和课件勘误见 [set/README.md](./set/README.md) 和 [dictionary/README.md](./dictionary/README.md)，运行目标为 `chapter6_example`。
+
+第七章 **7.1–7.3** 已按老师发布的 `Lesson 7 (2026秋季)-Beibei Wang.pdf`（101 页）逐项核对，属于**2026 秋课件预习实现**，不表示课堂已讲授完毕。类接口与核心算法与去年正文一致，已更新页码和勘误，去年的课后作业另标为补充练习。静态搜索见 [search/README.md](./search/README.md)，搜索树见 [tree/README.md](./tree/README.md#第七章预习二叉搜索树与-avl-树)，全章示例目标为 `chapter7_example`。课件已有代码、规则补全及必要修正在对应 README 中区分说明。
 
 ## 项目约定
 

@@ -69,3 +69,11 @@ add_executable(chapter6_example
 target_include_directories(chapter6_example PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
+
+# 第七章：已按 2026 秋预习课件核对；模板实例化及课件例子检查。
+add_executable(chapter7_example
+        search/examples/chapter7.cpp
+)
+target_include_directories(chapter7_example PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
