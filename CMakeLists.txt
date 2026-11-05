@@ -70,10 +70,27 @@ target_include_directories(chapter6_example PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-# 第七章：已按 2026 秋预习课件核对；模板实例化及课件例子检查。
+# 第七章：已按 2026 秋最终版课件核对；模板实例化及课件例子检查。
 add_executable(chapter7_example
         search/examples/chapter7.cpp
 )
 target_include_directories(chapter7_example PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+# 第八章第一部分：图的两种存储及接口自检（2026 秋预习课件）。
+add_executable(chapter8_part1_example
+        graph/examples/chapter8_part1.cpp
+)
+target_include_directories(chapter8_part1_example PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+# 第八章第二部分：遍历、连通分量与最小生成树；Kruskal 依赖并查集实现。
+add_executable(chapter8_part2_example
+        graph/examples/chapter8_part2.cpp
+        set/src/UFSets.cpp
+)
+target_include_directories(chapter8_part2_example PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
 )

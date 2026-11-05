@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <utility>
 
-// 2026 秋 Lesson 7（预习课件，已核对），7.2；E 是含公开成员 key 的完整记录，K 是关键码类型。
+// 2026 秋 Lesson 7（最终版课件，已核对），7.2；E 是含公开成员 key 的完整记录，K 是关键码类型。
 template <class E, class K>
 struct BSTNode {
     E data{};
@@ -26,7 +26,7 @@ template <class E, class K>
 class BST {
 public:
     BST() = default;
-    // 第 45 页：从 cin 读到终止关键码；流失败也结束，终止记录不入树。
+    // 第 51 页：从 cin 读到终止关键码；流失败也结束，终止记录不入树。
     explicit BST(K stopKey) : RefValue(stopKey) {
         try {
             E entry;
@@ -55,7 +55,7 @@ public:
     virtual ~BST() { makeEmpty(); }
 
     bool Search(const K key) const { return Search(key, root) != nullptr; }
-    // 补充：第 38 页非递归搜索对比入口。
+    // 补充：第 44 页非递归搜索对比入口。
     bool SearchIterative(const K key) const {
         const Node* currentNode = root;
         while (currentNode) {

@@ -3,7 +3,7 @@
 #include "tree/include/BST.h"
 #include <algorithm>
 
-// 2026 秋 Lesson 7（预习课件，已核对），7.3；bf = 右子树高度 - 左子树高度。
+// 2026 秋 Lesson 7（最终版课件，已核对），7.3；bf = 右子树高度 - 左子树高度。
 template <class E, class K>
 struct AVLNode : public BSTNode<E, K> {
     int bf = 0;
@@ -75,7 +75,7 @@ protected:
     }
     static int& balance(Node* node) { return static_cast<AVLNode<E, K>*>(node)->bf; }
 
-    // 第 63/66 页单旋：这里先按插入情形将两个 bf 置零。
+    // 第 71/74 页单旋：这里先按插入情形将两个 bf 置零。
     static void RotateL(Node*& subtreeRoot) {
         Node* oldRoot = subtreeRoot;
         subtreeRoot = oldRoot->right;
@@ -90,7 +90,7 @@ protected:
         subtreeRoot->right = oldRoot;
         balance(subtreeRoot) = balance(oldRoot) = 0;
     }
-    // 第 71 页：先左后右双旋，按旋转前中间结点的 bf 分情况更新。
+    // 第 79 页：先左后右双旋，按旋转前中间结点的 bf 分情况更新。
     static void RotateLR(Node*& subtreeRoot) {
         Node* oldRoot = subtreeRoot;
         Node* leftChild = oldRoot->left;
@@ -103,7 +103,7 @@ protected:
         balance(oldRoot) = balance(subtreeRoot) == -1 ? 1 : 0;
         balance(subtreeRoot) = 0;
     }
-    // 第 76 页：先右后左双旋。
+    // 第 84 页：先右后左双旋。
     static void RotateRL(Node*& subtreeRoot) {
         Node* oldRoot = subtreeRoot;
         Node* rightChild = oldRoot->right;
@@ -125,7 +125,7 @@ protected:
             else {
                 RotateR(subtreeRoot);
                 if (childBalance == 0) {
-                    // 第 92 页删除特例：单旋后高度不变，bf 不能都置零。
+                    // 第 100 页删除特例：单旋后高度不变，bf 不能都置零。
                     balance(subtreeRoot) = 1;
                     balance(subtreeRoot->right) = -1;
                     return false;
@@ -146,7 +146,7 @@ protected:
         return true;
     }
 
-    // 第 79-86 页只有步骤和例子；补充递归回溯，用 taller 传递高度变化。
+    // 第 87-94 页只有步骤和例子；补充递归回溯，用 taller 传递高度变化。
     static bool Insert(Node*& subtreeRoot, const E& entry, bool& taller) {
         if (!subtreeRoot) {
             subtreeRoot = new AVLNode<E, K>(entry);
@@ -172,7 +172,7 @@ protected:
         return true;
     }
 
-    // 第 89-94 页：左子树缩短则 bf+1，右子树缩短则 bf-1。
+    // 第 97-102 页：左子树缩短则 bf+1，右子树缩短则 bf-1。
     static void AfterShrink(Node*& subtreeRoot, int change, bool& shorter) {
         if (!shorter) return;
         balance(subtreeRoot) += change;
@@ -182,7 +182,7 @@ protected:
         // bf == 0 时 shorter 保持 true，继续向上回溯。
     }
 
-    // 第 87-99 页规则补全：双子女结点使用中序直接前驱替补。
+    // 第 95-107 页规则补全：双子女结点使用中序直接前驱替补。
     static bool Remove(Node*& subtreeRoot, const K& key, E* removedEntry, bool& shorter) {
         if (!subtreeRoot) { shorter = false; return false; }
         bool removed;

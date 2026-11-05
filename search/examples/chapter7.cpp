@@ -1,4 +1,4 @@
-// 依据 2026 秋 Lesson 7；旧课件补充练习单独标注。
+// 依据 2026 秋 Lesson 7 最终版；页码均为最终版 PDF 页序。
 #include "search/include/dataList.h"
 #include "tree/include/BST.h"
 #include "tree/include/AVLTree.h"
@@ -74,7 +74,7 @@ void staticSearchExample() {
 
 void binarySearchTreeExample() {
     SearchTree tree;
-    // 第 44 页建树序列。
+    // 第 50 页建树序列。
     for (int key : {53, 78, 65, 17, 87, 9, 81, 15})
         require(tree.Insert({key, std::to_string(key)}));
     require(!tree.Insert({53, "duplicate"}));
@@ -104,7 +104,7 @@ void avlExample() {
         require(tree.getRoot()->data.key == 20);
         checkAVL(tree.getRoot(), 0, 100);
     }
-    // 第 92 页删除特例及镜像：较高子树根 bf == 0，单旋后高度不变。
+    // 第 100 页删除特例及镜像：较高子树根 bf == 0，单旋后高度不变。
     const int deletionCases[][5] = {{2, 1, 4, 3, 5}, {4, 2, 5, 1, 3}};
     for (int caseIndex = 0; caseIndex < 2; ++caseIndex) {
         BalancedTree tree;
@@ -115,7 +115,7 @@ void avlExample() {
         checkAVL(tree.getRoot(), 0, 100);
     }
 
-    // 补充练习：2025 课件第 101 页图 1（2026 课件未收录）。
+    // 最终版第 111 页作业（4）：图 1，按中序直接前驱替补。
     // 按层序插入复现原图，再依次删除 22、3、10、9。
     BalancedTree homework;
     for (int key : {17, 13, 22, 9, 16, 20, 27, 3, 12, 15, 18, 10})
@@ -133,7 +133,7 @@ void avlExample() {
     }
 
     BalancedTree tree;
-    // 第 84-86 页插入序列，每步检查次序、高度和平衡因子。
+    // 第 92-94 页插入序列，每步检查次序、高度和平衡因子。
     const int keys[] = {16, 3, 7, 11, 9, 26, 18, 14, 15};
     for (int key : keys) {
         require(tree.Insert({key, std::to_string(key)}));

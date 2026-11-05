@@ -7,7 +7,7 @@
 #include <stdexcept>
 #include <utility>
 
-// 2026 秋 Lesson 7（预习课件，已核对），7.1：E 是附加数据类型，K 是关键码类型。
+// 2026 秋 Lesson 7（最终版课件，已核对），7.1：E 是附加数据类型，K 是关键码类型。
 template <class E, class K> class dataList;
 
 template <class E, class K>
@@ -86,7 +86,7 @@ public:
         return true;
     }
 
-    // 第 17 页：成功返回 1-based 序号，失败返回 Length()+1。
+    // 第 23 页：成功返回 1-based 序号，失败返回 Length()+1。
     virtual int SeqSearch(const K key) const {
         // 监视哨保证循环终止，每轮只比较关键码，无需再检查数组边界。
         Element[CurrentSize].key = key;
@@ -96,7 +96,7 @@ public:
         return index + 1;
     }
 
-    // 第 20 页：递归版失败返回 0，与监视哨版不同。
+    // 第 26 页：递归版失败返回 0，与监视哨版不同。
     int SeqSearch(const K key, int position) const {
         // position是1-based
         if (position < 1)
@@ -108,7 +108,7 @@ public:
         return SeqSearch(key, position + 1);
     }
 
-    // 补充：第 25 页判定树对应的折半搜索，要求关键码非递减。
+    // 补充：第 31 页判定树对应的折半搜索，要求关键码非递减。
     // 成功返回 1-based 序号，失败为 0；不自动排序。
     int BinarySearch(const K key) const {
         int low = 0, high = CurrentSize - 1;
