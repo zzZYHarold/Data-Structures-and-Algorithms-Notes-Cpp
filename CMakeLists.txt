@@ -78,7 +78,7 @@ target_include_directories(chapter7_example PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-# 第八章第一部分：图的两种存储及接口自检（2026 秋预习课件）。
+# 第八章第一组示例：图的两种存储及接口自检（2026 秋最终版课件）。
 add_executable(chapter8_part1_example
         graph/examples/chapter8_part1.cpp
 )
@@ -92,5 +92,12 @@ add_executable(chapter8_part2_example
         set/src/UFSets.cpp
 )
 target_include_directories(chapter8_part2_example PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+add_executable(chapter8_part3_example
+        graph/examples/chapter8_part3.cpp
+)
+target_include_directories(chapter8_part3_example PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
 )

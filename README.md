@@ -33,10 +33,12 @@
 | 7.1 | 静态搜索表、监视哨/递归顺序搜索、折半搜索 | [search/](./search/) | `dataList.h`、`examples/chapter7.cpp` |
 | 7.2 | 二叉搜索树、递归/迭代搜索、插入、后继替补删除 | [tree/](./tree/) | `BST.h` |
 | 7.3 | AVL 平衡因子、四种旋转、插入及前驱替补删除 | [tree/](./tree/) | `AVLTree.h` |
-| 8.1（2026 预习） | 图的基本概念、图的抽象接口 | [graph/](./graph/) | `Graph.h`（连通性与生成树仅概念） |
-| 8.2（2026 预习） | 带权无向图的邻接矩阵、邻接表、增删与邻接点枚举 | [graph/](./graph/) | `Graphmtx.h`、`Graphlnk.h`、`examples/chapter8_part1.cpp` |
-| 8.3（2026 预习） | DFS、BFS、无向图连通分量 | [graph/](./graph/) | `GraphTraversal.h`、`examples/chapter8_part2.cpp` |
-| 8.4（2026 预习） | 最小生成树：Kruskal、候选边堆版本 Prim | [graph/](./graph/) | `MinSpanTree.h`、`MinimumSpanningTree.h`、`examples/chapter8_part2.cpp` |
+| 8.1 | 图的基本概念、图的抽象接口 | [graph/](./graph/) | `Graph.h`（连通性与生成树仅概念） |
+| 8.2 | 邻接矩阵、邻接表、图的增删与邻接点枚举 | [graph/](./graph/) | `Graphmtx.h`、`Graphlnk.h`、`examples/chapter8_part1.cpp` |
+| 8.3 | DFS、BFS、无向图连通分量 | [graph/](./graph/) | `GraphTraversal.h`、`examples/chapter8_part2.cpp` |
+| 8.4 | 最小生成树：Kruskal、候选边堆版本 Prim | [graph/](./graph/) | `MinSpanTree.h`、`MinimumSpanningTree.h`、`examples/chapter8_part2.cpp` |
+| 8.5 | Dijkstra 单源最短路径、Floyd 全源最短路径 | [graph/](./graph/) | `ShortestPath.h`、`examples/chapter8_part3.cpp` |
+| 8.6 | AOV 拓扑排序、AOE 工期与关键活动 | [graph/](./graph/) | `ActivityNetwork.h`、`examples/chapter8_part3.cpp` |
 
 第五章 **5.1–5.7** 已统一按 2026 秋完整正式课件整理。具体实现范围、课件勘误和接口用法见 [tree/README.md](./tree/README.md)。
 
@@ -44,7 +46,7 @@
 
 第七章 **7.1–7.3** 已按 `Lesson 7 (2026秋季)-BeibeiWang-最终.pdf`（111 页）核对。最终版新增图形学搜索应用、展开 BST 删除图示并收录作业，现有核心算法继续适用。静态搜索、版本差异和勘误见 [search/README.md](./search/README.md)，搜索树见 [tree/README.md](./tree/README.md#第七章二叉搜索树与-avl-树)。全章目标为 `chapter7_example`，包含最终版第 111 页 AVL 连续删除作业。
 
-第八章已按 `Lesson 8 (2026秋季)-BeibeiWang-part1-预习.pdf`（46 页）与 `Lesson 8 (2026秋季)-BeibeiWang-part2-预习.pdf`（92 页）整理为 **2026 秋课件预习实现**。part2 已核对原有 8.1–8.2，并增加正文中的 **8.3 遍历与连通分量、8.4 最小生成树**；8.5–8.6 仍只有目录。邻接矩阵、邻接表、DFS/BFS、Kruskal 和堆版本 Prim 的来源、必要修正与补写接口见 [graph/README.md](./graph/README.md)，运行目标为 `chapter8_part1_example`、`chapter8_part2_example`。
+第八章已按 `Lesson 8 (2026秋季)-BeibeiWang-最终.pdf`（158 页）核对 **8.1–8.6**。已同步最终版页码与关键路径勘误说明，并收录第 93～94 页遍历/生成树作业、第 109 页最短路径作业及 Dijkstra/Floyd 过程表。页码、课件勘误与算例见 [graph/README.md](./graph/README.md)。三个运行目标为 `chapter8_part1_example`、`chapter8_part2_example`、`chapter8_part3_example`。
 
 ## 项目约定
 
