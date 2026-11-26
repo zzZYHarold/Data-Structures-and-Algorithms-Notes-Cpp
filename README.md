@@ -39,6 +39,11 @@
 | 8.4 | 最小生成树：Kruskal、候选边堆版本 Prim | [graph/](./graph/) | `MinSpanTree.h`、`MinimumSpanningTree.h`、`examples/chapter8_part2.cpp` |
 | 8.5 | Dijkstra 单源最短路径、Floyd 全源最短路径 | [graph/](./graph/) | `ShortestPath.h`、`examples/chapter8_part3.cpp` |
 | 8.6 | AOV 拓扑排序、AOE 工期与关键活动 | [graph/](./graph/) | `ActivityNetwork.h`、`examples/chapter8_part3.cpp` |
+| 9.1 | 排序码、稳定性和待排序数据表 | [sorting/](./sorting/) | `dataList.h` |
+| 9.2 | 直接插入、折半插入、希尔排序 | [sorting/](./sorting/) | `Sort.h` |
+| 9.3 | 冒泡、快速排序及两种划分方法 | [sorting/](./sorting/) | `Sort.h`、`dataList.h` |
+| 9.4 | 直接选择、锦标赛、堆排序 | [sorting/](./sorting/) | `Sort.h` |
+| 9.5 | 迭代二路归并、递归静态链表归并 | [sorting/](./sorting/) | `Sort.h`、`staticlinkList.h`、`examples/chapter9.cpp` |
 
 第五章 **5.1–5.7** 已统一按 2026 秋完整正式课件整理。具体实现范围、课件勘误和接口用法见 [tree/README.md](./tree/README.md)。
 
@@ -47,6 +52,8 @@
 第七章 **7.1–7.3** 已按 `Lesson 7 (2026秋季)-BeibeiWang-最终.pdf`（111 页）核对。最终版新增图形学搜索应用、展开 BST 删除图示并收录作业，现有核心算法继续适用。静态搜索、版本差异和勘误见 [search/README.md](./search/README.md)，搜索树见 [tree/README.md](./tree/README.md#第七章二叉搜索树与-avl-树)。全章目标为 `chapter7_example`，包含最终版第 111 页 AVL 连续删除作业。
 
 第八章已按 `Lesson 8 (2026秋季)-BeibeiWang-最终.pdf`（158 页）核对 **8.1–8.6**。已同步最终版页码与关键路径勘误说明，并收录第 93～94 页遍历/生成树作业、第 109 页最短路径作业及 Dijkstra/Floyd 过程表。页码、课件勘误与算例见 [graph/README.md](./graph/README.md)。三个运行目标为 `chapter8_part1_example`、`chapter8_part2_example`、`chapter8_part3_example`。
+
+第九章 **9.1–9.5** 已按 `Lesson 9 (2026秋季)-BeibeiWang-最终.pdf`（119 页）核对。[排序章节 README](./sorting/README.md) 收录 10 种排序的性能与稳定性对照、两种快排的搬移次数分析和第 119 页作业。全章示例目标为 `chapter9_example`，包含新算例和作业过程自检。
 
 ## 项目约定
 

@@ -101,3 +101,10 @@ add_executable(chapter8_part3_example
 target_include_directories(chapter8_part3_example PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
+
+add_executable(chapter9_example
+        sorting/examples/chapter9.cpp
+)
+target_include_directories(chapter9_example PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
